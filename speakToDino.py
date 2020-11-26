@@ -37,12 +37,16 @@ background3 = pygame.transform.scale(background3, (1920,640))
 background4 = pygame.transform.scale(background4, (1920,640))
 background5 = pygame.transform.scale(background5, (1920,640))
 
+# Starting positions for all background layers
 backX = 0
 backY = 0
 backVel = 0
-backCloseX = 0
-backCloseY = 0
-backCloseVel = 0
+backLayerX = 0
+backLayerY = 0
+backLayerVel = 0
+backFgX = 0
+backFgY = 0
+backFgVel = 0
 # Tile and Icon
 pygame.display.set_caption("Dino Run")
 icon = pygame.image.load('base_images/001-dinosaur.png')
@@ -53,6 +57,7 @@ playerImg = pygame.image.load("base_images/dinosaur.png")
 playerX = 50
 playerY = 480
 playerX_change = 0
+playerY_change = 0
 
 # Score
 score_value = 0
@@ -63,8 +68,12 @@ textX = 10
 textY = 10
 
 # Rectangles used for collisions
-# player_rect = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height())
+player_rect = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height())
 # test_rect = pygame.Rect(50, 480, 100, 50)
+
+# Jumping
+isJump = False
+jumpCount = 10
 
 
 def show_score(x, y):
@@ -79,13 +88,16 @@ def player(x, y):
 # Game loop
 running = True
 while running:
+    pygame.time.delay(30)
     # RGB values for screen
     screen.fill((0, 0, 0))
     # Background image
     if backX == -1920:
         backX = 0
-    if backCloseX == -1920:
-        backCloseX = 0
+    if backLayerX == -1920:
+        backLayerX = 0
+    if backFgX == -1920:
+        backFgX = 0
 
     # player_rect.x = playerX
     # player_rect.y = playerY
@@ -99,30 +111,57 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        # KEYDOWN - "checks to see if any keyboard key is being pressed"
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT and player_rect.x > 0 and backX < 0:
-                playerX_change = -2
-                backVel = 0.5
-                backCloseVel = 2
-            if event.key == pygame.K_RIGHT:
-                playerX_change = 2
-                backVel = -0.5
-                backCloseVel = -2
-        # KEYUP - "Checks to see if any key is released (stopped pressing)"
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                playerX_change = 0
-                backVel = 0
-                backCloseVel = 0
+    keys = pygame.key.get_pressed()
 
-    backVel = -0.5
-    backCloseVel = -2
+    if not isJump:
+        if keys[pygame.K_SPACE]:
+            isJump = True
+        # add animation code?
+    else:
+        if jumpCount >= -10:
+            playerY -= (jumpCount * abs(jumpCount)) * 0.35
+            jumpCount -= 1
+        else:
+            jumpCount = 10
+            isJump = False
+
+
+        # # KEYDOWN - "checks to see if any keyboard key is being pressed"
+        # if event.type == pygame.KEYDOWN:
+        #     if event.key == pygame.K_LEFT and player_rect.x > 0 and backX < 0:
+        #         playerX_change = -2
+        #         backVel = 0.5
+        #         backCloseVel = 2
+        #     if event.key == pygame.K_RIGHT:
+        #         playerX_change = 2
+        #         backVel = -0.5
+        #         backCloseVel = -2
+        #     if not isJump:
+        #         if event.key == pygame.K_SPACE:
+        #             isJump = True
+        # # KEYUP - "Checks to see if any key is released (stopped pressing)"
+        # if event.type == pygame.KEYUP:
+        #     if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+        #         playerX_change = 0
+        #         backVel = 0
+        #         backCloseVel = 0
+        #
+        #     if jumpCount >= -10:
+        #         playerY -= (jumpCount * abs(jumpCount)) * 0.5
+        #         jumpCount -= 1
+        #     else:
+        #         jumpCount = 10
+        #         isJump = False
+
+    backVel = -2
+    backLayerVel = -8
+    backFgVel = -10
 
     # Incorporate player movement
     playerX += playerX_change
     backX += backVel
-    backCloseX += backCloseVel
+    backLayerX += backLayerVel
+    backFgX += backFgVel
 
     # Show background to screen
     screen.blit(background2, (backX, backY))
@@ -133,13 +172,13 @@ while running:
     screen.blit(background, (backX + 1920, backY))
     screen.blit(background1, (backX, backY))
     screen.blit(background1, (backX + 1920, backY))
-    screen.blit(background4, (backCloseX, backCloseY))
-    screen.blit(background4, (backCloseX + 1920, backCloseY))
+    screen.blit(background4, (backLayerX, backLayerY))
+    screen.blit(background4, (backLayerX + 1920, backLayerY))
 
     # Show player before foreground
     player(playerX, playerY)
-    screen.blit(background5, (backCloseX, backCloseY))
-    screen.blit(background5, (backCloseX + 1920, backCloseY))
+    screen.blit(background5, (backFgX, backLayerY))
+    screen.blit(background5, (backFgX + 1920, backLayerY))
 
     # Show score
     show_score(textX, textY)
