@@ -20,7 +20,23 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 
 # Background
-background = pygame.image.load("base_images/background.png")
+# background = pygame.image.load("base_images/background.png")
+# Load background images
+background = pygame.image.load("Layers/4-BackgroundFar.png").convert_alpha()
+background1 = pygame.image.load("Layers/3-BackgroundClose.png").convert_alpha()
+background2 = pygame.image.load("Layers/5-Clouds.png").convert_alpha()
+background3 = pygame.image.load("Layers/6-Sky.png").convert_alpha()
+background4 = pygame.image.load("Layers/2-PlayerLayer.png").convert_alpha()
+background5 = pygame.image.load("Layers/1-Foreground.png").convert_alpha()
+
+# Scale down images
+background = pygame.transform.scale(background, (800,600))
+background1 = pygame.transform.scale(background1, (800,600))
+background2 = pygame.transform.scale(background2, (800,600))
+background3 = pygame.transform.scale(background3, (800,600))
+background4 = pygame.transform.scale(background4, (800,600))
+background5 = pygame.transform.scale(background5, (800,600))
+
 backX = 0
 backY = 0
 backVel = 0
@@ -66,8 +82,6 @@ while running:
     # Background image
     if backX == -800:
         backX = 0
-    screen.blit(background, (backX, backY))
-    screen.blit(background, (backX + 800, backY))
 
     player_rect.x = playerX
     player_rect.y = playerY
@@ -83,28 +97,41 @@ while running:
 
         # KEYDOWN - "checks to see if any keyboard key is being pressed"
         if event.type == pygame.KEYDOWN:
-            print("A keystroke is pressed")
             if event.key == pygame.K_LEFT:
-                print("Left arrow is pressed")
-                playerX_change = -3
+                playerX_change = -2
                 backVel = 2
             if event.key == pygame.K_RIGHT:
-                print("Right arrow is pressed")
-                playerX_change = 3
+                playerX_change = 2
                 backVel = -2
         # KEYUP - "Checks to see if any key is released (stopped pressing)"
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                print("Keystroke has been released")
                 playerX_change = 0
                 backVel = 0
+
 
     # Incorporate player movement
     playerX += playerX_change
     backX += backVel
 
-    # Initialize the player image
+    # Show background to screen
+    screen.blit(background2, (backX, backY))
+    screen.blit(background2, (backX + 800, backY))
+    screen.blit(background3, (backX, backY))
+    screen.blit(background3, (backX + 800, backY))
+    screen.blit(background, (backX, backY))
+    screen.blit(background, (backX + 800, backY))
+    screen.blit(background1, (backX, backY))
+    screen.blit(background1, (backX + 800, backY))
+    screen.blit(background4, (backX, backY))
+    screen.blit(background4, (backX + 800, backY))
+
+    # Show player before foreground
     player(playerX, playerY)
+    screen.blit(background5, (backX, backY))
+    screen.blit(background5, (backX + 800, backY))
+
+    # Show score
     show_score(textX, textY)
     pygame.display.update()
-    clock.tick(60)
+    # clock.tick(60)
