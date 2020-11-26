@@ -54,20 +54,20 @@ pygame.display.set_icon(icon)
 
 # Player
 playerImg = pygame.image.load("base_images/dinosaur.png")
-playerX = 50
-playerY = 400
+playerX = 10
+playerY = 350
 playerX_change = 0
 playerY_change = 0
 
 # PlayerAnimation
-d1 = pygame.transform.scale(pygame.image.load("Dino/dino1.png"), (200,200))
-d2 = pygame.transform.scale(pygame.image.load("Dino/dino2.png"), (200,200))
-d3 = pygame.transform.scale(pygame.image.load("Dino/dino3.png"), (200,200))
-d4 = pygame.transform.scale(pygame.image.load("Dino/dino4.png"), (200,200))
-d5 = pygame.transform.scale(pygame.image.load("Dino/dino5.png"), (200,200))
-d6 = pygame.transform.scale(pygame.image.load("Dino/dino6.png"), (200,200))
-d7 = pygame.transform.scale(pygame.image.load("Dino/dino7.png"), (200,200))
-d8 = pygame.transform.scale(pygame.image.load("Dino/dino8.png"), (200,200))
+d1 = pygame.transform.scale(pygame.image.load("Dino/dino1.png"), (250,250))
+d2 = pygame.transform.scale(pygame.image.load("Dino/dino2.png"), (250,250))
+d3 = pygame.transform.scale(pygame.image.load("Dino/dino3.png"), (250,250))
+d4 = pygame.transform.scale(pygame.image.load("Dino/dino4.png"), (250,250))
+d5 = pygame.transform.scale(pygame.image.load("Dino/dino5.png"), (250,250))
+d6 = pygame.transform.scale(pygame.image.load("Dino/dino6.png"), (250,250))
+d7 = pygame.transform.scale(pygame.image.load("Dino/dino7.png"), (250,250))
+d8 = pygame.transform.scale(pygame.image.load("Dino/dino8.png"), (250,250))
 dinoRun = [d1, d2, d3, d4, d5, d6, d7, d8]
 runCount = 0
 
