@@ -17,7 +17,7 @@ clock = pygame.time.Clock();
 pygame.init()
 
 # create the screen (width, height)
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((800, 640))
 
 # Background
 # background = pygame.image.load("base_images/background.png")
@@ -30,12 +30,12 @@ background4 = pygame.image.load("Layers/2-PlayerLayer.png").convert_alpha()
 background5 = pygame.image.load("Layers/1-Foreground.png").convert_alpha()
 
 # Scale down images
-background = pygame.transform.scale(background, (800,600))
-background1 = pygame.transform.scale(background1, (800,600))
-background2 = pygame.transform.scale(background2, (800,600))
-background3 = pygame.transform.scale(background3, (800,600))
-background4 = pygame.transform.scale(background4, (800,600))
-background5 = pygame.transform.scale(background5, (800,600))
+background = pygame.transform.scale(background, (1920,640))
+background1 = pygame.transform.scale(background1, (1920,640))
+background2 = pygame.transform.scale(background2, (1920,640))
+background3 = pygame.transform.scale(background3, (1920,640))
+background4 = pygame.transform.scale(background4, (1920,640))
+background5 = pygame.transform.scale(background5, (1920,640))
 
 backX = 0
 backY = 0
@@ -48,7 +48,7 @@ pygame.display.set_icon(icon)
 
 # Player
 playerImg = pygame.image.load("base_images/dinosaur.png")
-playerX = 370
+playerX = 50
 playerY = 480
 playerX_change = 0
 
@@ -80,7 +80,7 @@ while running:
     # RGB values for screen
     screen.fill((0, 0, 0))
     # Background image
-    if backX == -800:
+    if backX == -1920:
         backX = 0
 
     player_rect.x = playerX
@@ -116,22 +116,22 @@ while running:
 
     # Show background to screen
     screen.blit(background2, (backX, backY))
-    screen.blit(background2, (backX + 800, backY))
+    screen.blit(background2, (backX + 1920, backY))
     screen.blit(background3, (backX, backY))
-    screen.blit(background3, (backX + 800, backY))
+    screen.blit(background3, (backX + 1920, backY))
     screen.blit(background, (backX, backY))
-    screen.blit(background, (backX + 800, backY))
+    screen.blit(background, (backX + 1920, backY))
     screen.blit(background1, (backX, backY))
-    screen.blit(background1, (backX + 800, backY))
+    screen.blit(background1, (backX + 1920, backY))
     screen.blit(background4, (backX, backY))
-    screen.blit(background4, (backX + 800, backY))
+    screen.blit(background4, (backX + 1920, backY))
 
     # Show player before foreground
     player(playerX, playerY)
     screen.blit(background5, (backX, backY))
-    screen.blit(background5, (backX + 800, backY))
+    screen.blit(background5, (backX + 1920, backY))
 
     # Show score
     show_score(textX, textY)
     pygame.display.update()
-    # clock.tick(60)
+    clock.tick(60)
