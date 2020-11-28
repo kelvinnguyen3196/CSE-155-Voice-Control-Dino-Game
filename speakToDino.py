@@ -47,6 +47,15 @@ backLayerVel = 0
 backFgX = 0
 backFgY = 0
 backFgVel = 0
+
+# Load cactus images
+c1 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png"), (150, 150))
+c2 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png"), (150, 150))
+c3 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png"), (150, 150))
+c4 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png"), (150, 150))
+c5 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png"), (150, 150))
+
+
 # Tile and Icon
 pygame.display.set_caption("Dino Run")
 icon = pygame.image.load('base_images/001-dinosaur.png')
