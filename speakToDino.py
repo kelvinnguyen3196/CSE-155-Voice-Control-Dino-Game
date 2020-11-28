@@ -83,6 +83,7 @@ textY = 10
 player_rect = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height())
 # test_rect = pygame.Rect(50, 480, 100, 50)
 
+
 # Jumping
 isJump = False
 jumpCount = 10
@@ -92,6 +93,23 @@ def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
+def button(msg,x,y,w,h,ic,ac):
+	mouse = pygame.mouse.get_pos()
+	if x+w > mouse[0] > x and y+h > mouse[1] > y:
+		pygame.draw.rect(screen, ac, (x,y,w,h))
+	else:
+		pygame.draw.rect(screen, ic, (x,y,w,h))
+	#pygame.draw.rect(screen, (210,180,140),(x,10,xLen,yLen))
+	smallText = pygame.font.Font('freesansbold.ttf',17)
+	textSurf = smallText.render(msg, True, (0,0,0))
+	textRect = textSurf.get_rect()
+	textRect.center = (x+(w/2), y+(h/2))
+	screen.blit(textSurf, textRect)
+
+def show_buttons():
+	copperRed = (195, 124, 77)
+	lightTan = (235, 204, 171)
+	jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan)
 
 def player(x, y):
     global runCount
@@ -199,5 +217,9 @@ while running:
 
     # Show score
     show_score(textX, textY)
+    
+    # Show buttons
+    show_buttons()
     pygame.display.update()
+
     # clock.tick(60)
