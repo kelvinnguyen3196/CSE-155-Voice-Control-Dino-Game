@@ -93,10 +93,13 @@ def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
-def button(msg,x,y,w,h,ic,ac):
+def button(msg,x,y,w,h,ic,ac, action=None):
 	mouse = pygame.mouse.get_pos()
+	click = pygame.mouse.get_pressed()
 	if x+w > mouse[0] > x and y+h > mouse[1] > y:
 		pygame.draw.rect(screen, ac, (x,y,w,h))
+		if click[0] == 1 and action !=None:
+			action()
 	else:
 		pygame.draw.rect(screen, ic, (x,y,w,h))
 	#pygame.draw.rect(screen, (210,180,140),(x,10,xLen,yLen))
@@ -109,7 +112,7 @@ def button(msg,x,y,w,h,ic,ac):
 def show_buttons():
 	copperRed = (195, 124, 77)
 	lightTan = (235, 204, 171)
-	jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan)
+	#jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan)
 
 def player(x, y):
     global runCount
