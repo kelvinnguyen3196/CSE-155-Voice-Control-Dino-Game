@@ -87,11 +87,29 @@ player_rect = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get
 # Jumping
 isJump = False
 jumpCount = 10
+jumpKeyboardControl = True
 
 
 def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
+
+def show_jumpControl(x,y):
+	global jumpKeyboardControl
+	jumpControlFont = pygame.font.Font('freesansbold.ttf',20)
+	if jumpKeyboardControl == True:
+		message = "Keyboard"
+	else:
+		message = "Mic Input"
+	JumpControlText = jumpControlFont.render("Jump control: " + message, True, (0,0,0))
+	screen.blit(JumpControlText, (x,y))
+
+def changeJumpControl():
+	global jumpKeyboardControl
+	if jumpKeyboardControl == True:
+		jumpKeyboardControl = False
+	else:
+		jumpKeyboardControl = True
 
 def button(msg,x,y,w,h,ic,ac, action=None):
 	mouse = pygame.mouse.get_pos()
@@ -112,7 +130,7 @@ def button(msg,x,y,w,h,ic,ac, action=None):
 def show_buttons():
 	copperRed = (195, 124, 77)
 	lightTan = (235, 204, 171)
-	#jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan)
+	jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan,changeJumpControl)
 
 def player(x, y):
     global runCount
@@ -152,8 +170,9 @@ while running:
     keys = pygame.key.get_pressed()
 
     if not isJump:
-        if keys[pygame.K_SPACE]:
-            isJump = True
+    	if jumpKeyboardControl:
+	        if keys[pygame.K_SPACE]:
+	            isJump = True
         # add animation code?
     else:
         if jumpCount >= -10:
@@ -220,6 +239,9 @@ while running:
 
     # Show score
     show_score(textX, textY)
+
+    # Show what is controlling the jump
+    show_jumpControl(textX, textY+30)
     
     # Show buttons
     show_buttons()
