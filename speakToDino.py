@@ -30,12 +30,14 @@ background4 = pygame.image.load("Layers/2-PlayerLayer.png").convert_alpha()
 background5 = pygame.image.load("Layers/1-Foreground.png").convert_alpha()
 
 # Scale down images
-background = pygame.transform.scale(background, (1920,640))
-background1 = pygame.transform.scale(background1, (1920,640))
-background2 = pygame.transform.scale(background2, (1920,640))
-background3 = pygame.transform.scale(background3, (1920,640))
-background4 = pygame.transform.scale(background4, (1920,640))
-background5 = pygame.transform.scale(background5, (1920,640))
+backW = 1920
+backH = 640
+background = pygame.transform.scale(background, (backW,backH))
+background1 = pygame.transform.scale(background1, (backW,backH))
+background2 = pygame.transform.scale(background2, (backW,backH))
+background3 = pygame.transform.scale(background3, (backW,backH))
+background4 = pygame.transform.scale(background4, (backW,backH))
+background5 = pygame.transform.scale(background5, (backW,backH))
 
 # Starting positions for all background layers
 backX = 0
@@ -49,23 +51,25 @@ backFgY = 0
 backFgVel = 0
 
 # Load cactus images
-c1 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png").convert_alpha(), (115, 115))
-c2 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png").convert_alpha(), (115, 115))
-c3 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alpha(), (115, 115))
-c4 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (115, 115))
-c5 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (115, 115))
-c6 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png").convert_alpha(), (115, 115))
-c7 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png").convert_alpha(), (115, 115))
-c8 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alpha(), (115, 115))
-c9 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (115, 115))
-c10 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (115, 115))
-c11 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png").convert_alpha(), (115, 115))
-c12 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png").convert_alpha(), (115, 115))
-c13 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alpha(), (115, 115))
-c14 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (115, 115))
-c15 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (115, 115))
+cactiW = 115
+cactiH = 115
+c1 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png").convert_alpha(), (cactiW, cactiH))
+c2 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png").convert_alpha(), (cactiW, cactiH))
+c3 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alpha(), (cactiW, cactiH))
+c4 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (cactiW, cactiH))
+c5 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (cactiW, cactiH))
+c6 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png").convert_alpha(), (cactiW, cactiH))
+c7 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png").convert_alpha(), (cactiW, cactiH))
+c8 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alpha(), (cactiW, cactiH))
+c9 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (cactiW, cactiH))
+c10 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (cactiW, cactiH))
+c11 = pygame.transform.scale(pygame.image.load("Cacti/cactus1.png").convert_alpha(), (cactiW, cactiH))
+c12 = pygame.transform.scale(pygame.image.load("Cacti/cactus2.png").convert_alpha(), (cactiW, cactiH))
+c13 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alpha(), (cactiW, cactiH))
+c14 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (cactiW, cactiH))
+c15 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (cactiW, cactiH))
 
-
+crop_c1 = pygame.Surface((90,90))
 # Cacti positioning
 cy = 460
 # obstacle 1
@@ -93,6 +97,8 @@ c12x = 3800
 c14x = 3820
 
 
+
+
 cactusVel = 0
 
 
@@ -102,7 +108,6 @@ icon = pygame.image.load('base_images/001-dinosaur.png')
 pygame.display.set_icon(icon)
 
 # Player
-playerImg = pygame.image.load("base_images/dinosaur.png")
 playerX = 10
 playerY = 415
 playerX_change = 0
@@ -131,13 +136,19 @@ textX = 10
 textY = 10
 
 # Rectangles used for collisions
-player_rect = pygame.Rect(playerX, playerY, playerImg.get_width(), playerImg.get_height())
-# test_rect = pygame.Rect(50, 480, 100, 50)
+# player_rect = pygame.Rect(playerX, playerY, d1.get_width(), d1.get_height())
+test_rect = pygame.Rect(c1x, cy, c1.get_width(), c1.get_height())
 
 # Jumping
 isJump = False
 jumpCount = 10
 
+def collides(rect1, rect2):
+    if rect1.colliderect(rect2):
+        print("Player collided with 1st cactus")
+        # pygame.draw.rect(screen, (255, 0, 0), rect2)
+    # else:
+        # pygame.draw.rect(screen, (0, 0, 0), rect2)
 
 def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (0, 0, 0))
@@ -227,6 +238,11 @@ while running:
     cactusVel = -12
     backFgVel = -16
 
+    # backVel = 0
+    # backLayerVel = 0
+    # cactusVel = 0
+    # backFgVel = 0
+
 
     # Incorporate player/background movement
     playerX += playerX_change
@@ -259,20 +275,48 @@ while running:
     screen.blit(background1, (backX + 1920, backY))
     screen.blit(background4, (backLayerX, backLayerY))
     screen.blit(background4, (backLayerX + 1920, backLayerY))
+
     screen.blit(c1, (c1x, cy))
+    c1_rect = pygame.Rect(c1x + 30, cy + 25, c1.get_width() - 60, c1.get_height() - 25)
+    pygame.draw.rect(screen,(0,0,0), c1_rect, 4)
+
     screen.blit(c2, (c2x, cy))
     screen.blit(c3, (c3x, cy))
+    c2_rect = pygame.Rect(c2x + 40, cy + 35, c2.get_width() - 60, c2.get_height() - 35)
+    pygame.draw.rect(screen, (0, 0, 0), c2_rect, 4)
+
     screen.blit(c4, (c4x, cy))
     screen.blit(c5, (c5x, cy))
+    c4_rect = pygame.Rect(c4x + 20, cy + 30, c4.get_width() - 70, c4.get_height() - 30)
+    pygame.draw.rect(screen, (0, 0, 0), c4_rect, 4)
+
     screen.blit(c6, (c6x, cy))
+    c6_rect = pygame.Rect(c6x + 40, cy + 30, c6.get_width() - 80, c6.get_height() - 30)
+    pygame.draw.rect(screen, (0, 0, 0), c6_rect, 4)
+
     screen.blit(c7, (c7x, cy))
-    screen.blit(c8, (c8x, cy))
     screen.blit(c9, (c9x, cy))
+    c7_rect = pygame.Rect(c7x + 40, cy + 45, c7.get_width() - 60, c7.get_height() - 45)
+    pygame.draw.rect(screen, (0, 0, 0), c7_rect, 4)
+
+    screen.blit(c8, (c8x, cy))
+    c8_rect = pygame.Rect(c8x + 40, cy + 30, c8.get_width() - 80, c8.get_height() - 30)
+    pygame.draw.rect(screen, (0, 0, 0), c8_rect, 4)
+
     screen.blit(c10, (c10x, cy))
+    c10_rect = pygame.Rect(c10x + 40, cy + 30, c10.get_width() - 80, c10.get_height() - 30)
+    pygame.draw.rect(screen, (0, 0, 0), c10_rect, 4)
+
     screen.blit(c12, (c12x, cy))
-    screen.blit(c13, (c13x, cy))
     screen.blit(c14, (c14x, cy))
+    c12_rect = pygame.Rect(c12x + 40, cy + 45, c12.get_width() - 60, c12.get_height() - 45)
+    pygame.draw.rect(screen, (0, 0, 0), c12_rect, 4)
+
+    screen.blit(c13, (c13x, cy))
     screen.blit(c15, (c15x, cy))
+    c13_rect = pygame.Rect(c13x + 40, cy + 30, c13.get_width() - 60, c13.get_height() - 30)
+    pygame.draw.rect(screen, (0, 0, 0), c13_rect, 4)
+
     screen.blit(c1, (c1x + 3840,cy))
     screen.blit(c2, (c2x + 3840,cy))
     screen.blit(c3, (c3x + 3840,cy))
@@ -290,6 +334,11 @@ while running:
 
     # Show player before foreground
     player(playerX, playerY)
+    player_rect = pygame.Rect(playerX, playerY, d1.get_width(), d1.get_height())
+
+    collides(player_rect, c1_rect)
+
+    pygame.draw.rect(screen, (0,0,0), player_rect, 4)
     screen.blit(background5, (backFgX, backLayerY))
     screen.blit(background5, (backFgX + 1920, backLayerY))
 
