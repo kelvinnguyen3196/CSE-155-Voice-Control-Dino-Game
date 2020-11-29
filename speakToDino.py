@@ -124,7 +124,7 @@ def button(msg,x,y,w,h,ic,ac, action=None):
 	smallText = pygame.font.Font('freesansbold.ttf',17)
 	textSurf = smallText.render(msg, True, (0,0,0))
 	textRect = textSurf.get_rect()
-	textRect.center = (x+(w/2), y+(h/2))
+	textRect.center = (x+int(w/2), y+int(h/2))
 	screen.blit(textSurf, textRect)
 
 def show_buttons():
@@ -137,7 +137,7 @@ def player(x, y):
     
     if runCount == 16:
         runCount = 0
-    screen.blit(dinoRun[runCount//2], (x, y))   # divide by 2 so that animation is a little slower
+    screen.blit(dinoRun[int(runCount//2)], (int(x), int(y)))   # divide by 2 so that animation is a little slower
     runCount += 1
 
 
