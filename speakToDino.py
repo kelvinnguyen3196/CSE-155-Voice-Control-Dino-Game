@@ -1,5 +1,5 @@
 import pygame
-
+import SoundInputUtils
 from pygame import rect
 
 # Websites used:
@@ -89,48 +89,53 @@ isJump = False
 jumpCount = 10
 jumpKeyboardControl = True
 
+# Mic Utilities
+MicInputUtils = SoundInputUtils.SoundInputUtils()
+
+
 
 def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
 def show_jumpControl(x,y):
-	global jumpKeyboardControl
-	jumpControlFont = pygame.font.Font('freesansbold.ttf',20)
-	if jumpKeyboardControl == True:
-		message = "Keyboard"
-	else:
-		message = "Mic Input"
-	JumpControlText = jumpControlFont.render("Jump control: " + message, True, (0,0,0))
-	screen.blit(JumpControlText, (x,y))
+    global jumpKeyboardControl
+    jumpControlFont = pygame.font.Font('freesansbold.ttf',20)
+    if jumpKeyboardControl == True:
+        message = "Keyboard"
+    else:
+        message = "Mic Input"
+    JumpControlText = jumpControlFont.render("Jump control: " + message, True, (0,0,0))
+    screen.blit(JumpControlText, (x,y))
 
 def changeJumpControl():
-	global jumpKeyboardControl
-	if jumpKeyboardControl == True:
-		jumpKeyboardControl = False
-	else:
-		jumpKeyboardControl = True
+    global jumpKeyboardControl
+    if jumpKeyboardControl == True:
+        jumpKeyboardControl = False
+        MicInputUtils.openStream()
+    else:
+        jumpKeyboardControl = True
+        MicInputUtils.closeStream()
 
 def button(msg,x,y,w,h,ic,ac, action=None):
-	mouse = pygame.mouse.get_pos()
-	click = pygame.mouse.get_pressed()
-	if x+w > mouse[0] > x and y+h > mouse[1] > y:
-		pygame.draw.rect(screen, ac, (x,y,w,h))
-		if click[0] == 1 and action !=None:
-			action()
-	else:
-		pygame.draw.rect(screen, ic, (x,y,w,h))
-	#pygame.draw.rect(screen, (210,180,140),(x,10,xLen,yLen))
-	smallText = pygame.font.Font('freesansbold.ttf',17)
-	textSurf = smallText.render(msg, True, (0,0,0))
-	textRect = textSurf.get_rect()
-	textRect.center = (x+int(w/2), y+int(h/2))
-	screen.blit(textSurf, textRect)
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(screen, ac, (x,y,w,h))
+        if click[0] == 1 and action !=None:
+            action()
+    else:
+        pygame.draw.rect(screen, ic, (x,y,w,h))
+    smallText = pygame.font.Font('freesansbold.ttf',17)
+    textSurf = smallText.render(msg, True, (0,0,0))
+    textRect = textSurf.get_rect()
+    textRect.center = (x+int(w/2), y+int(h/2))
+    screen.blit(textSurf, textRect)
 
 def show_buttons():
-	copperRed = (195, 124, 77)
-	lightTan = (235, 204, 171)
-	jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan,changeJumpControl)
+    copperRed = (195, 124, 77)
+    lightTan = (235, 204, 171)
+    jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan,changeJumpControl)
 
 def player(x, y):
     global runCount
@@ -170,9 +175,13 @@ while running:
     keys = pygame.key.get_pressed()
 
     if not isJump:
-    	if jumpKeyboardControl:
-	        if keys[pygame.K_SPACE]:
-	            isJump = True
+        if jumpKeyboardControl:
+            if keys[pygame.K_SPACE]:
+                isJump = True
+        else:
+            MicInputUtils.listen()
+            if MicInputUtils.madeSound():
+                isJump = True
         # add animation code?
     else:
         if jumpCount >= -10:
