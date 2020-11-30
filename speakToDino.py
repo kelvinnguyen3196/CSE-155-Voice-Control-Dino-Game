@@ -19,9 +19,12 @@ pygame.init()
 # create the screen (width, height)
 screen = pygame.display.set_mode((800, 640))
 
+# Tile and Icon for game window
+pygame.display.set_caption("Dino Run")
+icon = pygame.image.load('base_images/001-dinosaur.png')
+pygame.display.set_icon(icon)
+
 # Background
-# background = pygame.image.load("base_images/background.png")
-# Load background images
 background = pygame.image.load("Layers/4-BackgroundFar.png").convert_alpha()
 background1 = pygame.image.load("Layers/3-BackgroundClose.png").convert_alpha()
 background2 = pygame.image.load("Layers/5-Clouds.png").convert_alpha()
@@ -69,9 +72,9 @@ c13 = pygame.transform.scale(pygame.image.load("Cacti/cactus3.png").convert_alph
 c14 = pygame.transform.scale(pygame.image.load("Cacti/cactus4.png").convert_alpha(), (cactiW, cactiH))
 c15 = pygame.transform.scale(pygame.image.load("Cacti/cactus5.png").convert_alpha(), (cactiW, cactiH))
 
-crop_c1 = pygame.Surface((90,90))
 # Cacti positioning
 cy = 460
+cactusVel = 0
 # obstacle 1
 c1x = 600
 # obstacle 2
@@ -96,17 +99,6 @@ c15x = 3425
 c12x = 3800
 c14x = 3820
 
-
-
-
-cactusVel = 0
-
-
-# Tile and Icon
-pygame.display.set_caption("Dino Run")
-icon = pygame.image.load('base_images/001-dinosaur.png')
-pygame.display.set_icon(icon)
-
 # Player
 playerX = 10
 playerY = 415
@@ -129,48 +121,47 @@ runCount = 0
 
 # Score
 score_value = 0
-# For any more fonts (https://www.dafont.com/),
-# Move downloaded .ttf file to project folder and call it below
-font = pygame.font.Font('freesansbold.ttf', 32)
-textX = 10
-textY = 10
+score_font = pygame.font.Font('freesansbold.ttf', 32)
+score_textX = 10
+score_textY = 10
+game_over_font = pygame.font.Font('freesansbold.ttf', 64)
+game_over_textX = 210
+game_over_textY = 250
 
-# Rectangles used for collisions
-# player_rect = pygame.Rect(playerX, playerY, d1.get_width(), d1.get_height())
-test_rect = pygame.Rect(c1x, cy, c1.get_width(), c1.get_height())
 
 # Jumping
 isJump = False
 jumpCount = 10
 
-def collides(rect1, rect2):
+# Collision
+collided = False
+def collides(rect1, rect2, collision):
     if rect1.colliderect(rect2):
-        print("Player collided with 1st cactus")
-        # pygame.draw.rect(screen, (255, 0, 0), rect2)
-    # else:
-        # pygame.draw.rect(screen, (0, 0, 0), rect2)
+        collision = True
+    return collision
 
 def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
 
-def player(x, y):
+# player positioning and animation
+def player(x, y, speed):
     global runCount
     
     if runCount == 16:
         runCount = 0
-    screen.blit(dinoRun[runCount//2], (x, y))   # divide by 2 so that animation is a little slower
+    screen.blit(dinoRun[runCount//speed], (x, y))   # divide by 2 so that animation is a little slower
     runCount += 1
 
 
 # Game loop
 running = True
 while running:
-    pygame.time.delay(25 )
+    pygame.time.delay(25)
     # RGB values for screen
     screen.fill((0, 0, 0))
-    # Background image
+    # Background image (parallax effect)
     if backX == -1920:
         backX = 0
     if backLayerX == -1920:
@@ -207,20 +198,14 @@ while running:
         c14x = 3820
 
 
-    # player_rect.x = playerX
-    # player_rect.y = playerY
-    #
-    # if player_rect.colliderect(test_rect):
-    #     pygame.draw.rect(screen, (255, 0, 0), test_rect)
-    # else:
-    #     pygame.draw.rect(screen, (0, 0, 0), test_rect)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
+
     keys = pygame.key.get_pressed()
 
+    # start jumping motion
     if not isJump:
         if keys[pygame.K_SPACE]:
             isJump = True
@@ -232,20 +217,8 @@ while running:
             jumpCount = 10
             isJump = False
 
-    # Velocity of Images
-    backVel = -4
-    backLayerVel = -12
-    cactusVel = -12
-    backFgVel = -16
 
-    # backVel = 0
-    # backLayerVel = 0
-    # cactusVel = 0
-    # backFgVel = 0
-
-
-    # Incorporate player/background movement
-    playerX += playerX_change
+    # Incorporate background movement
     backX += backVel
     backLayerX += backLayerVel
     c1x += cactusVel
@@ -264,7 +237,7 @@ while running:
     c15x += cactusVel
     backFgX += backFgVel
 
-    # Show background to screen
+# Show background to screen
     screen.blit(background2, (backX, backY))
     screen.blit(background2, (backX + 1920, backY))
     screen.blit(background3, (backX, backY))
@@ -276,47 +249,49 @@ while running:
     screen.blit(background4, (backLayerX, backLayerY))
     screen.blit(background4, (backLayerX + 1920, backLayerY))
 
+# create rectangles to use for collision
     screen.blit(c1, (c1x, cy))
     c1_rect = pygame.Rect(c1x + 30, cy + 25, c1.get_width() - 60, c1.get_height() - 25)
-    pygame.draw.rect(screen,(0,0,0), c1_rect, 4)
+    # pygame.draw.rect(screen,(0,0,0), c1_rect, 4)
 
     screen.blit(c2, (c2x, cy))
     screen.blit(c3, (c3x, cy))
     c2_rect = pygame.Rect(c2x + 40, cy + 35, c2.get_width() - 60, c2.get_height() - 35)
-    pygame.draw.rect(screen, (0, 0, 0), c2_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c2_rect, 4)
 
     screen.blit(c4, (c4x, cy))
     screen.blit(c5, (c5x, cy))
     c4_rect = pygame.Rect(c4x + 20, cy + 30, c4.get_width() - 70, c4.get_height() - 30)
-    pygame.draw.rect(screen, (0, 0, 0), c4_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c4_rect, 4)
 
     screen.blit(c6, (c6x, cy))
     c6_rect = pygame.Rect(c6x + 40, cy + 30, c6.get_width() - 80, c6.get_height() - 30)
-    pygame.draw.rect(screen, (0, 0, 0), c6_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c6_rect, 4)
 
     screen.blit(c7, (c7x, cy))
     screen.blit(c9, (c9x, cy))
     c7_rect = pygame.Rect(c7x + 40, cy + 45, c7.get_width() - 60, c7.get_height() - 45)
-    pygame.draw.rect(screen, (0, 0, 0), c7_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c7_rect, 4)
 
     screen.blit(c8, (c8x, cy))
     c8_rect = pygame.Rect(c8x + 40, cy + 30, c8.get_width() - 80, c8.get_height() - 30)
-    pygame.draw.rect(screen, (0, 0, 0), c8_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c8_rect, 4)
 
     screen.blit(c10, (c10x, cy))
     c10_rect = pygame.Rect(c10x + 40, cy + 30, c10.get_width() - 80, c10.get_height() - 30)
-    pygame.draw.rect(screen, (0, 0, 0), c10_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c10_rect, 4)
 
     screen.blit(c12, (c12x, cy))
     screen.blit(c14, (c14x, cy))
     c12_rect = pygame.Rect(c12x + 40, cy + 45, c12.get_width() - 60, c12.get_height() - 45)
-    pygame.draw.rect(screen, (0, 0, 0), c12_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c12_rect, 4)
 
     screen.blit(c13, (c13x, cy))
     screen.blit(c15, (c15x, cy))
     c13_rect = pygame.Rect(c13x + 40, cy + 30, c13.get_width() - 60, c13.get_height() - 30)
-    pygame.draw.rect(screen, (0, 0, 0), c13_rect, 4)
+    # pygame.draw.rect(screen, (0, 0, 0), c13_rect, 4)
 
+# display cacti to screen
     screen.blit(c1, (c1x + 3840,cy))
     screen.blit(c2, (c2x + 3840,cy))
     screen.blit(c3, (c3x + 3840,cy))
@@ -332,17 +307,33 @@ while running:
     screen.blit(c14, (c14x + 3840, cy))
     screen.blit(c15, (c15x + 3840, cy))
 
-    # Show player before foreground
-    player(playerX, playerY)
-    player_rect = pygame.Rect(playerX, playerY, d1.get_width(), d1.get_height())
+    # check for collisions
+    player_rect = pygame.Rect(playerX + 60, playerY + 50, d1.get_width() -90, d1.get_height() - 110)
+    rectList = [c1_rect, c2_rect, c4_rect, c6_rect, c7_rect, c8_rect, c10_rect,c12_rect, c13_rect]
+    for i in rectList:
+        collided = collides(player_rect, i, collided)
 
-    collides(player_rect, c1_rect)
+    if not collided:
+        player(playerX, playerY, 2)
+        backVel = -4
+        backLayerVel = -12
+        cactusVel = -12
+        backFgVel = -16
+        score_value = score_value + 1
 
-    pygame.draw.rect(screen, (0,0,0), player_rect, 4)
+    # stop game if collided
+    if collided:
+        player(playerX,playerY, 100)
+        game_over_text()
+        backVel = 0
+        backLayerVel = 0
+        cactusVel = 0
+        backFgVel = 0
+
     screen.blit(background5, (backFgX, backLayerY))
     screen.blit(background5, (backFgX + 1920, backLayerY))
 
     # Show score
     show_score(textX, textY)
     pygame.display.update()
-    # clock.tick(120)
+    clock.tick(60)
