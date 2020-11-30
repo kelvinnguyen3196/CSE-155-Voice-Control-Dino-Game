@@ -140,10 +140,15 @@ def collides(rect1, rect2, collision):
         collision = True
     return collision
 
+# show score on screen
 def show_score(x, y):
-    score = font.render("Score: " + str(score_value), True, (0, 0, 0))
+    score = score_font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
+# show game over on screen
+def game_over_text():
+    score = game_over_font.render("Game Over", True, (0, 0, 0))
+    screen.blit(score, (game_over_textX, game_over_textY))
 
 # player positioning and animation
 def player(x, y, speed):
@@ -334,6 +339,6 @@ while running:
     screen.blit(background5, (backFgX + 1920, backLayerY))
 
     # Show score
-    show_score(textX, textY)
+    show_score(score_textX, score_textY)
     pygame.display.update()
     clock.tick(60)
