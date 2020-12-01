@@ -243,8 +243,6 @@ while running:
     backFgX += backFgVel
 
 # Show background to screen
-    screen.blit(background2, (backX, backY))
-    screen.blit(background2, (backX + 1920, backY))
     screen.blit(background3, (backX, backY))
     screen.blit(background3, (backX + 1920, backY))
     screen.blit(background, (backX, backY))
@@ -253,6 +251,8 @@ while running:
     screen.blit(background1, (backX + 1920, backY))
     screen.blit(background4, (backLayerX, backLayerY))
     screen.blit(background4, (backLayerX + 1920, backLayerY))
+    screen.blit(background2, (backX, backY))
+    screen.blit(background2, (backX + 1920, backY))
 
 # create rectangles to use for collision
     screen.blit(c1, (c1x, cy))
