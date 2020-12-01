@@ -15,6 +15,7 @@ class SoundInputUtils:
 		self.samplerate = 16000
 		self.stream = None
 		self.volume = 0
+		self.currentlyJumping = False
 
 	def __del__(self):
 		pass
@@ -36,8 +37,11 @@ class SoundInputUtils:
 #if __name__ == "__main__": main(sys.argv)
 
 	def madeSound(self):
-		if self.volume > 20:
+		if self.volume > 15 and self.currentlyJumping==False:
+			self.currentlyJumping = True
 			return True
+		elif self.volume<15 and self.currentlyJumping==True:
+			self.currentlyJumping=False
 
 	def openStream(self):
 		self.stream = p.open(format=self.pyaudio_format,
@@ -52,6 +56,7 @@ class SoundInputUtils:
 		samples = np.fromstring(data, dtype=aubio.float_type)
 		self.volume = np.sum(samples**2)/len(samples)
 		self.volume = self.volume * 1000
+		#print("|" * int(self.volume))
 
 	def closeStream(self):
 		self.stream.stop_stream()
