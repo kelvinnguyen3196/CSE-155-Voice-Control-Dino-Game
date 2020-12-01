@@ -123,6 +123,8 @@ runCount = 0
 score_value = 0
 score_font = pygame.font.Font('freesansbold.ttf', 32)
 score_textX = 10
+textX = 10
+textY = 10
 score_textY = 10
 game_over_font = pygame.font.Font('freesansbold.ttf', 64)
 game_over_textX = 210
@@ -154,12 +156,10 @@ def show_score(x, y):
     score = score_font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
-<<<<<<< HEAD
 # show game over on screen
 def game_over_text():
     score = game_over_font.render("Game Over", True, (0, 0, 0))
     screen.blit(score, (game_over_textX, game_over_textY))
-=======
 def show_jumpControl(x,y):
     global jumpKeyboardControl
     jumpControlFont = pygame.font.Font('freesansbold.ttf',20)
@@ -203,7 +203,6 @@ def show_buttons():
     copperRed = (195, 124, 77)
     lightTan = (235, 204, 171)
     jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan,changeJumpControl)
->>>>>>> microphoneInput
 
 # player positioning and animation
 def player(x, y, speed):
@@ -211,11 +210,7 @@ def player(x, y, speed):
     
     if runCount == 16:
         runCount = 0
-<<<<<<< HEAD
-    screen.blit(dinoRun[runCount//speed], (x, y))   # divide by 2 so that animation is a little slower
-=======
     screen.blit(dinoRun[int(runCount//2)], (int(x), int(y)))   # divide by 2 so that animation is a little slower
->>>>>>> microphoneInput
     runCount += 1
 
 
@@ -271,10 +266,6 @@ while running:
 
     # start jumping motion
     if not isJump:
-<<<<<<< HEAD
-        if keys[pygame.K_SPACE]:
-            isJump = True
-=======
         if jumpKeyboardControl:
             if keys[pygame.K_SPACE]:
                 isJump = True
@@ -285,7 +276,6 @@ while running:
             if MicInputUtils.madeSound():
                 isJump = True
         # add animation code?
->>>>>>> microphoneInput
     else:
         if jumpCount >= -10:
             playerY -= (jumpCount * abs(jumpCount)) * 0.5
@@ -411,11 +401,6 @@ while running:
     screen.blit(background5, (backFgX + 1920, backLayerY))
 
     # Show score
-<<<<<<< HEAD
-    show_score(score_textX, score_textY)
-    pygame.display.update()
-    clock.tick(60)
-=======
     show_score(textX, textY)
 
     # Show buttons
@@ -427,4 +412,3 @@ while running:
     pygame.display.update()
 
     # clock.tick(60)
->>>>>>> microphoneInput
