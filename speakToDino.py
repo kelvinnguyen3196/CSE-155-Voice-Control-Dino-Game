@@ -52,6 +52,18 @@ backLayerVel = 0
 backFgX = 0
 backFgY = 0
 backFgVel = 0
+bgFarSpd = 0
+bgCloseSpd = 0
+cloudSpd = 0
+skySpd = 0
+playerLayerSpd = 0 
+foregroundSpd = 0
+l0 = 0
+l1 = 0
+l2 = 0
+l3 = 0
+l4 = 0
+l5 = 0
 
 # Load cactus images
 cactiW = 115
@@ -255,6 +267,18 @@ while running:
         c12x = 3800
     if c14x == -20:
         c14x = 3820
+    if l0 == -1920:
+        l0 = 0
+    if l1 == -1920:
+        l1 = 0
+    if l2 == -1920:
+        l2 = 0
+    if l3 == -1920:
+        l3 = 0
+    if l4 == -1920:
+        l4 = 0
+    if l5 == -1920:
+        l5 = 0
 
 
     for event in pygame.event.get():
@@ -303,18 +327,24 @@ while running:
     c14x += cactusVel
     c15x += cactusVel
     backFgX += backFgVel
+    l0 += bgFarSpd
+    l1 += bgCloseSpd
+    l2 += cloudSpd
+    l3 += skySpd
+    l4 += playerLayerSpd
+    l5 += foregroundSpd
 
 # Show background to screen
-    screen.blit(background3, (backX, backY))
-    screen.blit(background3, (backX + 1920, backY))
-    screen.blit(background, (backX, backY))
-    screen.blit(background, (backX + 1920, backY))
-    screen.blit(background1, (backX, backY))
-    screen.blit(background1, (backX + 1920, backY))
-    screen.blit(background4, (backLayerX, backLayerY))
-    screen.blit(background4, (backLayerX + 1920, backLayerY))
-    screen.blit(background2, (backX, backY))
-    screen.blit(background2, (backX + 1920, backY))
+    screen.blit(background3, (l3, backY))
+    screen.blit(background3, (l3 + 1920, backY))
+    screen.blit(background, (l0, backY))
+    screen.blit(background, (l0 + 1920, backY))
+    screen.blit(background1, (l1, backY))
+    screen.blit(background1, (l1 + 1920, backY))
+    screen.blit(background4, (l4, backLayerY))
+    screen.blit(background4, (l4 + 1920, backLayerY))
+    screen.blit(background2, (l2, backY))
+    screen.blit(background2, (l2 + 1920, backY))
 
 # create rectangles to use for collision
     screen.blit(c1, (c1x, cy))
@@ -386,6 +416,12 @@ while running:
         backLayerVel = -12
         cactusVel = -12
         backFgVel = -16
+        bgFarSpd = -2
+        bgCloseSpd = -4
+        cloudSpd = -3
+        skySpd = -4
+        playerLayerSpd = -12
+        foregroundSpd = -16
         score_value = score_value + 1
 
     # stop game if collided
@@ -396,9 +432,15 @@ while running:
         backLayerVel = 0
         cactusVel = 0
         backFgVel = 0
+        bgFarSpd = 0
+        bgCloseSpd = 0
+        cloudSpd = 0
+        skySpd = 0
+        playerLayerSpd = 0 
+        foregroundSpd = 0
 
-    screen.blit(background5, (backFgX, backLayerY))
-    screen.blit(background5, (backFgX + 1920, backLayerY))
+    screen.blit(background5, (l5, backLayerY))
+    screen.blit(background5, (l5 + 1920, backLayerY))
 
     # Show score
     show_score(textX, textY)
