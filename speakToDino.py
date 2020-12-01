@@ -1,5 +1,5 @@
 import pygame
-
+import SoundInputUtils
 from pygame import rect
 
 # Websites used:
@@ -129,9 +129,18 @@ game_over_textX = 210
 game_over_textY = 250
 
 
+
 # Jumping
 isJump = False
 jumpCount = 10
+jumpKeyboardControl = True
+
+# Keep track of if the user is holding the click button (for button functionality)
+currentlyHoldingClick = False
+
+# Mic Utilities
+MicInputUtils = SoundInputUtils.SoundInputUtils()
+
 
 # Collision
 collided = False
@@ -145,10 +154,56 @@ def show_score(x, y):
     score = score_font.render("Score: " + str(score_value), True, (0, 0, 0))
     screen.blit(score, (x, y))
 
+<<<<<<< HEAD
 # show game over on screen
 def game_over_text():
     score = game_over_font.render("Game Over", True, (0, 0, 0))
     screen.blit(score, (game_over_textX, game_over_textY))
+=======
+def show_jumpControl(x,y):
+    global jumpKeyboardControl
+    jumpControlFont = pygame.font.Font('freesansbold.ttf',20)
+    if jumpKeyboardControl == True:
+        message = "Keyboard"
+    else:
+        message = "Mic Input"
+    JumpControlText = jumpControlFont.render("Jump control: " + message, True, (0,0,0))
+    screen.blit(JumpControlText, (x,y))
+
+def changeJumpControl():
+    global jumpKeyboardControl
+    if jumpKeyboardControl == True:
+        jumpKeyboardControl = False
+        # Start recieving input from the mic
+        MicInputUtils.openStream()
+    else:
+        jumpKeyboardControl = True
+        # Stop recieving input from the mic
+        MicInputUtils.closeStream()
+
+def button(msg,x,y,w,h,ic,ac, action=None):
+    global currentlyHoldingClick
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    if currentlyHoldingClick == True and click[0] == 0: currentlyHoldingClick=False
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(screen, ac, (x,y,w,h))
+        if click[0] == 1 and currentlyHoldingClick==False and action !=None:
+            currentlyHoldingClick = True
+            action()
+    else:
+        pygame.draw.rect(screen, ic, (x,y,w,h))
+    smallText = pygame.font.Font('freesansbold.ttf',17)
+    textSurf = smallText.render(msg, True, (0,0,0))
+    textRect = textSurf.get_rect()
+    textRect.center = (x+int(w/2), y+int(h/2))
+    screen.blit(textSurf, textRect)
+
+def show_buttons():
+    copperRed = (195, 124, 77)
+    lightTan = (235, 204, 171)
+    jumpControlBtn = button("Change Jump Control",550,10,200,50,copperRed, lightTan,changeJumpControl)
+>>>>>>> microphoneInput
 
 # player positioning and animation
 def player(x, y, speed):
@@ -156,7 +211,11 @@ def player(x, y, speed):
     
     if runCount == 16:
         runCount = 0
+<<<<<<< HEAD
     screen.blit(dinoRun[runCount//speed], (x, y))   # divide by 2 so that animation is a little slower
+=======
+    screen.blit(dinoRun[int(runCount//2)], (int(x), int(y)))   # divide by 2 so that animation is a little slower
+>>>>>>> microphoneInput
     runCount += 1
 
 
@@ -212,8 +271,21 @@ while running:
 
     # start jumping motion
     if not isJump:
+<<<<<<< HEAD
         if keys[pygame.K_SPACE]:
             isJump = True
+=======
+        if jumpKeyboardControl:
+            if keys[pygame.K_SPACE]:
+                isJump = True
+        else:
+            # Listen to the mic input
+            MicInputUtils.listen()
+            # Determine if sound was made
+            if MicInputUtils.madeSound():
+                isJump = True
+        # add animation code?
+>>>>>>> microphoneInput
     else:
         if jumpCount >= -10:
             playerY -= (jumpCount * abs(jumpCount)) * 0.5
@@ -339,6 +411,20 @@ while running:
     screen.blit(background5, (backFgX + 1920, backLayerY))
 
     # Show score
+<<<<<<< HEAD
     show_score(score_textX, score_textY)
     pygame.display.update()
     clock.tick(60)
+=======
+    show_score(textX, textY)
+
+    # Show buttons
+    show_buttons()
+
+    # Show what is controlling the jump
+    show_jumpControl(textX, textY+30)
+    
+    pygame.display.update()
+
+    # clock.tick(60)
+>>>>>>> microphoneInput
