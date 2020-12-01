@@ -223,7 +223,8 @@ def player(x, y, speed):
     if runCount == 16:
         runCount = 0
     screen.blit(dinoRun[int(runCount//2)], (int(x), int(y)))   # divide by 2 so that animation is a little slower
-    runCount += 1
+    if isJump == False:
+        runCount += 1
 
 
 # Game loop
